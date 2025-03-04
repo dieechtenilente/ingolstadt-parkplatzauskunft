@@ -7,7 +7,7 @@ import argparse
 # Parse Parameters
 
 # Set up the argument parser
-parser = argparse.ArgumentParser(description="Script to interact with InfluxDB.")
+parser = argparse.ArgumentParser(description="Script get parking information from Ingolstadt")
 
 # Adding the command line arguments
 parser.add_argument("--username", type=str, help="Username")
