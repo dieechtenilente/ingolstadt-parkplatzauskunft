@@ -75,7 +75,7 @@ try:
       query['parkingspots'] = parkingspots
       #print(json.dumps(query))
 
-      f = open(outputfile, "a", encoding='utf8')
+      f = open(output_file, "a", encoding='utf8')
       f.write(json.dumps(query) + "\n")
       f.close()
 
