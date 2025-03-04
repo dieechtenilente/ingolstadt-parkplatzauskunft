@@ -15,7 +15,7 @@ RUN python3 -m venv /opt/script/venv
 RUN . /opt/script/venv/bin/activate
 
 RUN /opt/script/venv/bin/pip install --upgrade pip
-RUN /opt/script/venv/bin/pip install requests bs4
+RUN /opt/script/venv/bin/pip install requests bs4 lxml
 
 COPY getData.py /opt/script/getData.py
 
