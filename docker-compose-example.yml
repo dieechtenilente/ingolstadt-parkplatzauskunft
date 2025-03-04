@@ -1,0 +1,10 @@
+services:
+  ingolstadt-parkplatzauskunft:
+    container_name: ingolstadt-parkplatzauskunft
+    image: ghcr.io/dieechtenilente/ingolstadt-parkplatzauskunftingolstadt-parkplatzauskunft:latest
+    restart: unless-stopped
+    environment:
+      - PASSWORD=password
+      - USERNAME=username
+      - URL=https://example.com
+      - OUTPUT_FILE=file.json

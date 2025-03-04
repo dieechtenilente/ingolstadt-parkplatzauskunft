@@ -2,9 +2,28 @@ import requests
 import json
 from bs4 import BeautifulSoup
 import config
+import argparse
 
-url = config.url
-output_file = config.output_file
+# Parse Parameters
+
+# Set up the argument parser
+parser = argparse.ArgumentParser(description="Script to interact with InfluxDB.")
+
+# Adding the command line arguments
+parser.add_argument("--username", type=str, help="Username")
+parser.add_argument("--password", type=str, help="Password")
+parser.add_argument("--url", type=str, help="URL")
+parser.add_argument("--output_file", type=str, help="Output file")
+
+# Parse the arguments
+args = parser.parse_args()
+
+# Access the command line arguments
+username = args.username
+password = args.password
+url = args.url
+output_file = args.output_file
+
 
 headers = {"content-type" : "application/soap+xml"}
 body = f"""
@@ -12,8 +31,8 @@ body = f"""
             <soap:Header/>
             <soap:Body>
                <cfc:getParkInfoData>
-                  <cfc:login>{config.username}</cfc:login>
-                  <cfc:password>{config.password}</cfc:password>
+                  <cfc:login>{username}</cfc:login>
+                  <cfc:password>{password}</cfc:password>
                </cfc:getParkInfoData>
             </soap:Body>
          </soap:Envelope>
