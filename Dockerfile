@@ -17,9 +17,10 @@ RUN . /opt/script/venv/bin/activate
 RUN /opt/script/venv/bin/pip install --upgrade pip
 RUN /opt/script/venv/bin/pip install requests bs4
 
-COPY script.py /opt/script/getData.py
+COPY getData.py /opt/script/getData.py
 
 RUN chmod +x /opt/script/getData.py
+RUN mkdir -p /opt/script/output
 
 ENTRYPOINT /opt/script/venv/bin/python3 /opt/script/getData.py --password $PASSWORD \
                        --username $USERNAME \
