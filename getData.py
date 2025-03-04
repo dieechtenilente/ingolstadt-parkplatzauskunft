@@ -1,7 +1,6 @@
 import requests
 import json
 from bs4 import BeautifulSoup
-import config
 import argparse
 
 # Parse Parameters

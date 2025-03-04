@@ -1,8 +1,10 @@
 services:
   ingolstadt-parkplatzauskunft:
     container_name: ingolstadt-parkplatzauskunft
-    image: ghcr.io/dieechtenilente/ingolstadt-parkplatzauskunftingolstadt-parkplatzauskunft:latest
+    image: ghcr.io/dieechtenilente/ingolstadt-parkplatzauskunft/ingolstadt-parkplatzauskunft:latest
     restart: unless-stopped
+    volumes:
+      - ./output:/opt/script/output
     environment:
       - PASSWORD=password
       - USERNAME=username
