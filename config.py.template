@@ -1,0 +1,4 @@
+username = ""
+password = ""
+url = ""
+output_file = "auskunft.json"
