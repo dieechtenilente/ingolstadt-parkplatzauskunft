@@ -2,6 +2,8 @@ import requests
 import json
 from bs4 import BeautifulSoup
 import argparse
+from time import sleep
+from datetime import datetime
 
 # Parse Parameters
 
@@ -36,66 +38,75 @@ body = f"""
             </soap:Body>
          </soap:Envelope>
          """
-try:
-   response = requests.post(url, data = body, headers = headers)
 
-   if (response.status_code == 200):
-      content = str(response.content).replace("&lt;", "<")
-      content = content.replace("\\n", "")
-      content = content.replace("\\t", "")
-      content = content.replace("\\xc3\\xa4", "ä")
-      content = content.replace("\\xc3\\xbc", "ü")
-      content = content.replace("\\xc3\\xbc", "ö")
-      content = content.replace("b'<?xml version=\\'1.0\\' encoding=\\'UTF-8\\'?><soapenv:Envelope xmlns:soapenv=\"http://www.w3.org/2003/05/soap-envelope\"><soapenv:Body><ns:getParkInfoDataResponse xmlns:ns=\"http://cfc_webservice\"><ns:return>", "")
-      content = content.replace("</ns:return></ns:getParkInfoDataResponse></soapenv:Body></soapenv:Envelope>'", "")
-      #content is now a clean xml
-      #print(content)
+def getData():
+   try:
+      response = requests.post(url, data = body, headers = headers)
 
-      content = content.replace('<?xml version="1.0" encoding="UTF-8"?>',"")
-      contentXML = BeautifulSoup(content, "lxml")
+      if (response.status_code == 200):
+         content = str(response.content).replace("&lt;", "<")
+         content = content.replace("\\n", "")
+         content = content.replace("\\t", "")
+         content = content.replace("\\xc3\\xa4", "ä")
+         content = content.replace("\\xc3\\xbc", "ü")
+         content = content.replace("\\xc3\\xbc", "ö")
+         content = content.replace("b'<?xml version=\\'1.0\\' encoding=\\'UTF-8\\'?><soapenv:Envelope xmlns:soapenv=\"http://www.w3.org/2003/05/soap-envelope\"><soapenv:Body><ns:getParkInfoDataResponse xmlns:ns=\"http://cfc_webservice\"><ns:return>", "")
+         content = content.replace("</ns:return></ns:getParkInfoDataResponse></soapenv:Body></soapenv:Envelope>'", "")
+         #content is now a clean xml
+         #print(content)
 
-      # JSON object for this query
-      query = {}
-      query['id'] = contentXML.find('parkinfoquery')['id']
-      query['timestamp'] = contentXML.find('parkinfoquery')['timestamp']
-      query = json.loads(json.dumps(query))
+         content = content.replace('<?xml version="1.0" encoding="UTF-8"?>',"")
+         contentXML = BeautifulSoup(content, "lxml")
 
-      parkingspots = []
+         # JSON object for this query
+         query = {}
+         query['id'] = contentXML.find('parkinfoquery')['id']
+         query['timestamp'] = contentXML.find('parkinfoquery')['timestamp']
+         query = json.loads(json.dumps(query))
 
-      for i in contentXML.find_all('parkinfoitem'):
-         name = i.find('name').get_text()
-         categories = i.find('categories').get_text()
-         max = i.find('max').get_text()
-         free = i.find('free').get_text()
-         tendency = i.find('tendency').get_text()
+         parkingspots = []
 
-         data = {}
-         data['name'] = str(name)
-         data['categories'] = str(name)
+         for i in contentXML.find_all('parkinfoitem'):
+            name = i.find('name').get_text()
+            categories = i.find('categories').get_text()
+            max = i.find('max').get_text()
+            free = i.find('free').get_text()
+            tendency = i.find('tendency').get_text()
 
-         try:
-            data['max'] = int(max)
-         except ValueError:
-            data['max'] = -1
-         
-         try:
-            data['free'] = int(free)
-         except ValueError:
-            data['free'] = -1
-         
-         try:
-            data['tendency'] = int(tendency)
-         except ValueError:
-            data['tendency'] = -1
+            data = {}
+            data['name'] = str(name)
+            data['categories'] = str(name)
 
-         parkingspots.append(data)
+            try:
+               data['max'] = int(max)
+            except ValueError:
+               data['max'] = -1
+            
+            try:
+               data['free'] = int(free)
+            except ValueError:
+               data['free'] = -1
+            
+            try:
+               data['tendency'] = int(tendency)
+            except ValueError:
+               data['tendency'] = -1
 
-      query['parkingspots'] = parkingspots
-      #print(json.dumps(query))
+            parkingspots.append(data)
 
-      f = open(output_file, "a", encoding='utf8')
-      f.write(json.dumps(query) + "\n")
-      f.close()
+         query['parkingspots'] = parkingspots
+         #print(json.dumps(query))
 
-except (requests.exceptions.SSLError, TypeError, TimeoutError, requests.exceptions.ConnectionError) as e:
-   response = None
+         f = open(output_file, "a", encoding='utf8')
+         f.write(json.dumps(query) + "\n")
+         f.close()
+
+   except (requests.exceptions.SSLError, TypeError, TimeoutError, requests.exceptions.ConnectionError) as e:
+      response = None
+
+
+while True:
+    print(str(datetime.now()) + " - Fetching data")
+    getData()
+    print(str(datetime.now()) + " - Wait for " + str(1800) + " seconds.")
+    sleep(1800)
