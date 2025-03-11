@@ -74,8 +74,15 @@ def getData():
             tendency = i.find('tendency').get_text()
 
             data = {}
-            data['name'] = str(name)
-            data['categories'] = str(name)
+            try:
+               data['name'] = str(name)
+            except AttributeError:
+               data['name'] = "-"
+
+            try:
+               data['categories'] = str(name)
+            except AttributeError:
+               data['name'] = "-"
 
             try:
                data['max'] = int(max)
