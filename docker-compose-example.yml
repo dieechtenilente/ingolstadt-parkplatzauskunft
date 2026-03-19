@@ -10,3 +10,8 @@ services:
       - USERNAME=username
       - URL=https://example.com
       - OUTPUT_FILE=file.json
+    deploy:
+      resources:
+        limits:
+          cpus: '0.01'
+          memory: 64M
