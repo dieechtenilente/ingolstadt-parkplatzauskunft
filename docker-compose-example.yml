@@ -9,7 +9,7 @@ services:
       - PASSWORD=password
       - USERNAME=username
       - URL=https://example.com
-      - OUTPUT_FILE=file.json
+      - OUTPUT_FILE=/opt/script/output/auskunft.json
     deploy:
       resources:
         limits:
