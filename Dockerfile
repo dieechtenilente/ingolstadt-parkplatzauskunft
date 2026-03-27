@@ -4,18 +4,11 @@ FROM debian:bookworm-slim
 # Set environment variables to non-interactive (to avoid prompts during installation)
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt update && apt upgrade -y
+RUN apt update && apt upgrade -y && apt install -y python3 python3.12-venv python3-pip && rm -rf /var/lib/apt/lists/*
 
-RUN apt install -y python3 python3.11-venv python3-pip && rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /opt/script/venv && python3 -m venv /opt/script/venv
 
-RUN mkdir -p /opt/script/venv
-
-RUN python3 -m venv /opt/script/venv
-
-RUN . /opt/script/venv/bin/activate
-
-RUN /opt/script/venv/bin/pip install --upgrade pip
-RUN /opt/script/venv/bin/pip install requests bs4 lxml
+RUN /opt/script/venv/bin/pip install --no-cache-dir --upgrade pip && /opt/script/venv/bin/pip install --no-cache-dir requests bs4 lxml
 
 COPY getData.py /opt/script/getData.py
 
