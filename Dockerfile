@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y --no-install-recommends python3-minimal
 RUN rm -rf /var/lib/apt/lists/* /usr/share/doc/* /usr/share/man/* /usr/share/locale/*
 
-RUN pip install --no-cache-dir --no-compile --upgrade pip && pip install --no-compile --no-cache-dir requests bs4 lxml
+RUN python3 -m ensurepip && pip install --no-cache-dir --no-compile --upgrade pip && pip install --no-compile --no-cache-dir requests bs4 lxml
 
 COPY getData.py /opt/script/getData.py
 
