@@ -1,5 +1,5 @@
 # Use Debian bookworm slim image
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 # Set environment variables to non-interactive (to avoid prompts during installation)
 ENV DEBIAN_FRONTEND=noninteractive
